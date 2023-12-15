@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block main%}
+
+    <a href="/rgr">Главная страница</a>
+    <form method="POST"> 
+        <h1>Вход</h1>
+        <h2>Пожалуйста, авторизуйтесь</h2>
+
+        <div>
+            <label for="username">Пользователь</label>
+            <input type="text" name="username" value = '{{ my_user }}'>
+        </div>
+
+        <div>
+            <label for="password">Пароль</label>
+            <input type="password" name="password">
+        </div>
+
+        <button type="submit">Войти</button>
+
+        {% if error %}
+            <p class="error">{{ error }}</p>
+            <a href="{{ url_for('rgr.register') }}">Регистрация</a>
+        {% endif %}
+    </form>
+    
+{% endblock %}

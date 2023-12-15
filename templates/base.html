@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заико Полина Алексеевна. Расчетно-графическая работа</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+
+    {% block script %}
+        <script src="{{ url_for('static', filename='rgr.js') }} "></script>"
+    {% endblock %}
+</head>
+
+<body>
+    <header>
+        <ul>
+            <li class="current"><a href="/rgr">Список книг</a></li>
+            <li class="current"><a href="">Добавить новую книгу</a></li>
+            {% if current_user.is_authenticated %}
+            <li class="current"><a href="">{{ current_user.username }}</a></li>
+            <li class="current"><a href="/logout">Выйти из профиля</a></li>
+            {% else %}
+            <li class="current"><a href="/rgr/login">Логин</a></li>
+            <li class="current"><a href="/rgr/register">Регистрация</a></li>
+            {% endif %}
+        </ul>
+        
+    </header>
+
+    <main> 
+        {% block main%}{% endblock %}
+    </main>
+
+    <footer >
+        &copy; Заико Полина, ФБИ-14, 3 курс, 2023 КНИГИ
+    </footer>
+</body>
+</html>
