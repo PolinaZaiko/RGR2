@@ -47,7 +47,7 @@ def register():
 
     # Проверка на длину пароля
     if len(password_form) < 8:
-        return render_template("register.html", error="Пароль меньше 8-ти символов")
+        return render_template("register.html", error="Пароль меньше 8-ти символов",  username=username_form)
 
     '''
     Проверяем существование пользователя в БД с таким же именем
@@ -66,7 +66,7 @@ def register():
 
     # Проверка на существование пользователя
     if isUserExist is not None:
-        return render_template ("register.html", error="Пользователь с таким именем уже существует")
+        return render_template ("register.html", error="Пользователь с таким именем уже существует",  username=username_form)
     
     # Хэшируем пароль
     hashedPswd = generate_password_hash(password_form, method='pbkdf2')
@@ -95,17 +95,17 @@ def login():
 
     #Проверка на пустой пароль
     if not password_form:
-        return render_template("login.html", error="Пустой пароль")
+        return render_template("login.html", error="Пустой пароль", username=username_form)
 
     my_user = users.query.filter_by(username=username_form).first()
 
     # Проверка на существование пользователя
     if my_user is None:
-        return render_template("login.html", error="Пользователь не найден")
+        return render_template("login.html", error="Пользователь не найден", username=username_form)
 
     # Проверка на правильность пароля
     if not check_password_hash(my_user.password, password_form):
-        return render_template("login.html", error="Неправильный пароль")
+        return render_template("login.html", error="Неправильный пароль", username=username_form)
 
     # Сохраняем JWT токен
     login_user(my_user, remember=False)
@@ -118,7 +118,6 @@ def login():
 @rgr.route("/rgr/add_book", methods=["GET", "POST"])
 @login_required
 def add_book():
-    #проверка на администратора
     if request.method == "POST":
         title = request.form.get("title")
         author = request.form.get("author")
@@ -133,7 +132,7 @@ def add_book():
             db.session.commit()
             return redirect(url_for('rgr.list'))
         else:
-            return render_template("add_book.html", error="Заполните все поля!")
+            return render_template("add_book.html", error="Заполните все поля!", title=title, author=author, pages=pages, publisher=publisher, cover=cover)
     return render_template("add_book.html")
 
 
@@ -177,6 +176,6 @@ def list():
     titles = books.query.with_entities(books.title).distinct().all()
     publishers = books.query.with_entities(books.publisher).distinct().all()
 
-    return render_template('list.html', pagination=pagination, bookes=bookes, authors=authors, titles=titles, publishers=publishers)
+    return render_template('list.html', pagination=pagination, bookes=bookes, authors=authors, titles=titles, publishers=publishers, pages_from=pages_from, pages_to=pages_to)
 
 

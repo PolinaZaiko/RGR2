@@ -67,6 +67,19 @@ img {
   font-size: 32px;
 }
 
+.a {
+  color: rgb(1, 77, 230);
+  text-decoration: none;   
+  text-shadow: 3px 3px 3px gray;
+  font-weight: bold;
+  font-size: 31px;;
+}
+
+.a:hover {
+  color: rgb(237, 7, 87);
+  font-size: 32px;
+}
+
 /* Свойство display: grid; превращает элемент с классом .row в грид-контейнер. 
 Это означает, что все прямые дочерние элементы этого контейнера теперь будут 
 автоматически размещаться внутри этой сетки. */
@@ -116,40 +129,92 @@ img {
 }
 
 .knopki {
-  margin-bottom: 50px;
-}
-
-.knopki a {
-  font-weight: bold;
-  font-size: 30px;
-  text-decoration: none; 
-  background-color: rgb(121, 177, 152);
-  margin-right: 10px;
-  padding: 10px 20px;
-  font-size: 30px;
-  border-radius: 10px; 
-  color: white;
   cursor: pointer;
+  font-family: Comic Sans MS;
+  background-color: rgb(121, 177, 152);
+  color: white;
+  font-size: 20px;
+  padding: 5px 5px;
+  text-decoration: none; 
+  border-radius: 10px; 
+  
 }
 
-
-.knopki a:hover {
+.knopki:hover {
   background-color: rgb(31, 181, 113); /* цвет фона при наведении */
 }
 
-form {
+form div {
   display: flex;
-  flex-direction: column;
-  align-items: start;
-  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
 }
-form select, form input, form button {
-  width: 200px;
+
+form select, form input {
+  width: 250px;
   padding: 5px;
+  font-size: 15px;
+  font-weight: bold;
   border-radius: 5px;
   border: 1px solid #ccc;
+  margin-right: 10px;
+  text-align: center;
 }
+
 form button {
-  width: auto;
   cursor: pointer;
+  font-family: Comic Sans MS;
+  background-color: rgb(31, 181, 113);
+  color: white;
+  font-size: 20px;
+  padding: 10px 10px;
+  margin: 0 auto;
+  display: block;
+  border-radius: 25px;
+}
+
+.opt {
+  margin-top: 50px;
+  color: rgb(230, 1, 104);
+  font-family: Comic Sans MS;
+  text-align: center;
+  font-size: 35px;
+  cursor: pointer;
+}
+
+.form {
+  margin: 0 auto; /* центрирование формы по горизонтали */
+  padding: 20px; /* отступы внутри формы */
+  width: 30%; /* ширина формы */
+  box-sizing: border-box; /* чтобы padding не увеличивал общую ширину формы */
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+input[type="text"], 
+.form input[type="number"], 
+input[type="file"], 
+input[type="submit"] 
+input[type="username"], 
+input[type="password"] {
+    width: 100%; /* чтобы поля ввода занимали всю ширину формы */
+    margin-bottom: 30px; /* отступы между полями ввода */
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+table {
+  border: 1px solid black;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 60px;
+  font-size: 20px;
+}
+
+th, td {
+  border: 1px solid black;
+  padding: 10px;
 }
