@@ -1,7 +1,7 @@
 # импортируем переменную db из файла
 from . import db 
 from flask_login import UserMixin
-from flask_migrate import Migrate
+
 
 
 '''

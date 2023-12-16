@@ -2,44 +2,41 @@ body {
     background-color: rgb(253, 250, 250);
     color: #000000;
   }
+
   
 header {
-    background-image: linear-gradient(to right, rgb(191, 255, 94), rgb(120, 241, 124));
-    padding: 15px;
-    color: rgb(242, 255, 184); 
-    font-style: italic; 
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 0;
-    margin: 0px;
-    font-size: 25px;
-    font-family: Arial;
-    text-align: center;
-
-    z-index: 2;
+  background-image: linear-gradient(to right, rgb(191, 255, 94), rgb(120, 241, 124));
+  padding: 35px;
+  color: rgb(242, 255, 184); 
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  font-family: Comic Sans MS;
+  text-align: center;
+  z-index: 2;
   }
 
 footer {
   background-image: linear-gradient(to right, rgb(191, 255, 94), rgb(120, 241, 124));
-    color: rgb(1, 77, 230);
-    padding: 15px; 
-    font-size: 20pt; 
-    font-style: arial; 
-    text-align: right;
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    left: 0;
+  color: rgb(1, 77, 230);
+  padding: 15px; 
+  font-size: 20px; 
+  font-family: Comic Sans MS;
+  text-align: right;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
  }  
 
- main {
-    margin-top: 160px;
-    margin-bottom: 60px;
-    padding: 10px;
+main {
+  margin-top: 150px;
+  margin-bottom: 60px;
+  padding: 10px;
  }
 
- img {
+img {
   width: 400px;
   height: auto;
   margin: 0px 200px 20px 200px;
@@ -52,9 +49,8 @@ footer {
 }
 
 .current {
-    display: inline-block;
-    margin-right: 20px;
-    color: white;
+  display: inline-block;
+  margin-right: 20px;
 }
 
 .current a {
@@ -63,12 +59,12 @@ footer {
   text-shadow: 3px 3px 3px gray;
   font-weight: bold;
   margin-right: 30px;
-  font-size: 30px;;
+  font-size: 31px;;
 }
 
 .current a:hover {
   color: rgb(237, 7, 87);
-  font-size: 31px;
+  font-size: 32px;
 }
 
 /* Свойство display: grid; превращает элемент с классом .row в грид-контейнер. 
@@ -85,8 +81,75 @@ footer {
 .row {
   margin-left: 10px;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   grid-column-gap: 10px; /* расстояние между колонками */
-  grid-row-gap: 10px; /* расстояние между рядами */
+  grid-row-gap: 50px; /* расстояние между рядами */
+  margin-bottom: 100px;
+  margin-top: 10px;
+}
 
+.book-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%; /* ширина обложки будет равна ширине блока .book-card */
+}
+
+.book-cover {
+  width: 100%; /* ширина обложки будет равна ширине блока .book-card */
+  max-width: 290px; /* максимальная ширина обложки */
+  height: 100%; /* высота автоматически подстраивается под ширину, сохраняя пропорции */
+  object-fit: cover; /* изображение подстраивается под заданные размеры без искажений */
+}
+
+.book-info {
+  margin-bottom: -10px; 
+  font-family: Gill Sans;
+}
+
+.book-title {
+  font-size: 15px; 
+  font-family: Marker Felt;
+  max-width: 100%;
+  text-align: center;
+
+}
+
+.knopki {
+  margin-bottom: 50px;
+}
+
+.knopki a {
+  font-weight: bold;
+  font-size: 30px;
+  text-decoration: none; 
+  background-color: rgb(121, 177, 152);
+  margin-right: 10px;
+  padding: 10px 20px;
+  font-size: 30px;
+  border-radius: 10px; 
+  color: white;
+  cursor: pointer;
+}
+
+
+.knopki a:hover {
+  background-color: rgb(31, 181, 113); /* цвет фона при наведении */
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 10px;
+}
+form select, form input, form button {
+  width: 200px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+form button {
+  width: auto;
+  cursor: pointer;
 }

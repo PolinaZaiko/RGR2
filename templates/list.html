@@ -1,20 +1,69 @@
 {% extends 'base.html' %}
 {% block main %}
-    <h1>Список книг</h1>
 
+    <form action="/rgr/list" method="get">
+        <select name="title">
+            <option value="">Название</option>
+            {% for title in titles %}
+                <option value="{{ title[0] }}" {% if request.args.get('title') == title[0]%} selected{% endif %}>{{ title[0] }} </option>
+            {% endfor %}
+        </select>   
+
+        <select name="author">
+            <option value="">Автор</option>
+            {% for author in authors %}
+            <option value="{{ author[0] }}" {% if request.args.get('author') == author[0] %} selected{% endif %}>{{ author[0] }}</option>
+            {% endfor %}
+        </select>
+        
+        <select name="publisher">
+            <option value="">Издательство</option>
+            {% for publisher in publishers %}
+                <option value="{{ publisher[0] }}" {% if request.args.get('publisher') == publisher[0] %} selected{% endif %}>{{ publisher[0] }}</option>
+            {% endfor %}
+        </select>        
+        
+        <select name="sort_by">
+            <option value="">Сортировать по</option>
+            <option value="title" {% if request.args.get('sort_by') == 'title' %}selected{% endif %}>Название</option>
+            <option value="author" {% if request.args.get('sort_by') == 'author' %}selected{% endif %}>Автор</option>
+            <option value="pages" {% if request.args.get('sort_by') == 'pages' %}selected{% endif %}>Количество страниц</option>
+            <option value="publisher" {% if request.args.get('sort_by') == 'publisher' %}selected{% endif %}>Издательство</option>
+        </select>
+
+        <input type="number" name="pages_from" placeholder="Страницы от" value="{{ pages_from }}">
+        <input type="number" name="pages_to" placeholder="Страницы до" value="{{ pages_to }}">
+    
+
+        <select name="sort_by">
+            <option value="">Сортировать по</option>
+            <option value="title" {% if request.args.get('sort_by') == 'title' %}selected{% endif %}>Название</option>
+            <option value="author" {% if request.args.get('sort_by') == 'author' %}selected{% endif %}>Автор</option>
+            <option value="pages" {% if request.args.get('sort_by') == 'pages' %}selected{% endif %}>Количество страниц</option>
+            <option value="publisher" {% if request.args.get('sort_by') == 'publisher' %}selected{% endif %}>Издательство</option>
+        </select>
+
+        <button type="submit">Применить</button>
+    </form>
+  
+    <h1 style="margin-top: 50px;">Список книг</h1>
     <div class="row">
         {% for book in pagination.items %}
-            <div>
-                <h5>{{ book.title }}</h5>
-                <p>by {{ book.author }} ({{ book.pages }} pages, published by {{ book.publisher }})</p>
-            </div>
+        <div class="book-card">
+            <h5 class="book-title">{{ book.title }}</h5>
+            <img class="book-cover" src="{{ url_for('static', filename='oblozhki/' + book.cover) }}">
+            <p class="book-info ">Автор: {{ book.author }}</p>
+            <p class="book-info">Издатель: {{ book.publisher }}</p>
+            <p class="book-info">{{ book.pages }} страниц</p>
+        </div>
         {% endfor %}
     </div>
-    {% if pagination.has_next %}
-        <a href="/rgr/list?page={{ pagination.next_num }}">Далее</a>
-    {% endif %}
-    {% if pagination.page != 1 %}
-    <a href="/rgr/list?page={{ pagination.prev_num }}">Назад</a>
-    {% endif %}
-
+    <div class="knopki">
+        {% if pagination.has_next %}
+            <a href="/rgr/list?page={{ pagination.next_num }}">Далее</a>
+        {% endif %}
+        {% if pagination.page != 1 %}
+        <a href="/rgr/list?page={{ pagination.prev_num }}">Назад</a>
+        {% endif %}
+    </div>
 {% endblock %}

@@ -19,6 +19,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{user_db}:{password}@{hos
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
+# директория для загруженных файлов
+UPLOAD_FOLDER = './static/oblozhki'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'webp'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 # Подключаем Flask-Login
 login_manager = LoginManager()
 # Куда редиректить, если пользователь не авторизован, # а он пытается попасть на защищенную страницу

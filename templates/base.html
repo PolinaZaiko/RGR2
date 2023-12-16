@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Заико Полина Алексеевна. Расчетно-графическая работа</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    
 
     {% block script %}
         <script src="{{ url_for('static', filename='rgr.js') }} "></script>"
@@ -16,7 +17,9 @@
         <ul>
             <li class="current"><a href="/rgr">Главная страница</a></li>
             <li class="current"><a href="/rgr/list">Список книг</a></li>
+            {% if current_user.is_authenticated and current_user.username == 'polina' %}
             <li class="current"><a href="/rgr/add_book">Добавить новую книгу</a></li>
+            {% endif %}
             {% if current_user.is_authenticated %}
             <li class="current"><a href="">{{ current_user.username }}</a></li>
             <li class="current"><a href="/logout">Выйти из профиля</a></li>

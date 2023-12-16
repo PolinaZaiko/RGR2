@@ -1,9 +1,15 @@
-from flask import Blueprint, abort, request, render_template, redirect, url_for
+from flask import Blueprint, request, render_template, redirect, url_for, current_app
+
 from Db import db
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import login_user, login_required, current_user, logout_user
 from Db.models import users, books
-import psycopg2
+import os
+from werkzeug.utils import secure_filename
+import time
+
+
+
 
 rgr = Blueprint ("rgr", __name__)
 
@@ -105,19 +111,24 @@ def login():
     login_user(my_user, remember=False)
     return redirect("/rgr")
 
-@rgr.route ("/rgr/add_book", methods=["GET", "POST"])
+# Вероятно, проблема связана с тем, как вы сохраняете файл обложки. Вы используете функцию secure_filename, которая удаляет все "небезопасные" символы из имени файла. Это может включать в себя пробелы, специальные символы и даже некоторые буквы, в зависимости от настроек вашей системы. В результате, если имя файла содержит только "небезопасные" символы, после применения secure_filename останется только расширение файла.
+
+# Чтобы решить эту проблему, вы можете добавить к имени файла некоторую уникальную строку перед сохранением. Например, вы можете использовать текущее время или идентификатор пользователя:
+
+@rgr.route("/rgr/add_book", methods=["GET", "POST"])
 @login_required
 def add_book():
     #проверка на администратора
-    if current_user.username != 'polina':
-        return redirect(url_for('rgr'))
     if request.method == "POST":
         title = request.form.get("title")
         author = request.form.get("author")
         pages = request.form.get("pages")
         publisher = request.form.get("publisher")
-        if title and author and pages and publisher:
-            new_book = books(title=title, author=author, pages=pages, publisher=publisher)
+        cover = request.files.get("cover")
+        if title and author and pages and publisher and cover:
+            filename = secure_filename(str(time.time()) + "_" + cover.filename)
+            cover.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+            new_book = books(title=title, author=author, pages=pages, publisher=publisher, cover=filename)
             db.session.add(new_book)
             db.session.commit()
             return redirect(url_for('rgr.list'))
@@ -127,8 +138,45 @@ def add_book():
 
 
 @rgr.route("/rgr/list", methods=["GET"])
-@login_required 
 def list():
     page = request.args.get('page', 1, type=int)
-    pagination = books.query.paginate(page=page, per_page=20, error_out=False)
-    return render_template('list.html', pagination=pagination)
+
+    # получаем параметры фильтрации и сортировки из запроса
+    title = request.args.get("title")
+    author = request.args.get("author")
+    pages_from = request.args.get("pages_from")
+    pages_to = request.args.get("pages_to")
+    publisher = request.args.get("publisher")
+    sort_by = request.args.get("sort_by")
+
+    # начинаем с всех книг
+    bookes_query = books.query
+
+    # фильтруем по введенным данным
+    if title:
+        bookes_query = bookes_query.filter(books.title.contains(title))
+    if author:
+        bookes_query = bookes_query.filter(books.author.contains(author))
+    if pages_from:
+        bookes_query = bookes_query.filter(books.pages >= int(pages_from))
+    if pages_to:
+        bookes_query = bookes_query.filter(books.pages <= int(pages_to))
+    if publisher:
+        bookes_query = bookes_query.filter(books.publisher.contains(publisher))
+
+    # сортируем по выбранному полю
+    if sort_by:
+        bookes_query = bookes_query.order_by(getattr(books, sort_by))
+
+    # получаем все книги после фильтрации и сортировки
+    pagination = bookes_query.paginate(page=page, per_page=20, error_out=False)
+    bookes = pagination.items
+
+    # получаем уникальные авторы, названия и издательства
+    authors = books.query.with_entities(books.author).distinct().all()
+    titles = books.query.with_entities(books.title).distinct().all()
+    publishers = books.query.with_entities(books.publisher).distinct().all()
+
+    return render_template('list.html', pagination=pagination, bookes=bookes, authors=authors, titles=titles, publishers=publishers)
+
+
