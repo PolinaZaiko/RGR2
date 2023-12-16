@@ -1,4 +1,4 @@
-from flask import Blueprint, abort, request, render_template, redirect
+from flask import Blueprint, abort, request, render_template, redirect, url_for
 from Db import db
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import login_user, login_required, current_user, logout_user
@@ -14,12 +14,11 @@ def start():
 
 @rgr.route ("/rgr")
 def main():
-    return render_template('rgr.html')
+    if current_user.is_authenticated:
+        return render_template('rgr.html', username=current_user.username)
+    else:
+        return render_template('rgr.html')
 
-@rgr.route ("/rgr")
-def aut():
-    username = current_user.username
-    return render_template('rgr.html', username=username)
 
 @rgr.route('/logout')
 @login_required
@@ -106,18 +105,30 @@ def login():
     login_user(my_user, remember=False)
     return redirect("/rgr")
 
+@rgr.route ("/rgr/add_book", methods=["GET", "POST"])
+@login_required
+def add_book():
+    #проверка на администратора
+    if current_user.username != 'polina':
+        return redirect(url_for('rgr'))
+    if request.method == "POST":
+        title = request.form.get("title")
+        author = request.form.get("author")
+        pages = request.form.get("pages")
+        publisher = request.form.get("publisher")
+        if title and author and pages and publisher:
+            new_book = books(title=title, author=author, pages=pages, publisher=publisher)
+            db.session.add(new_book)
+            db.session.commit()
+            return redirect(url_for('rgr.list'))
+        else:
+            return render_template("add_book.html", error="Заполните все поля!")
+    return render_template("add_book.html")
 
-# @rgr.route ('/rgr/api', methods = ['POST'])
-# def api():
-#     data = request.json
 
-#     if data [''] == '':
-#         return  (data[''])
-    
-#     if data[''] == '':
-#         return  (data [''])
-    
-#     if data[''] == '':
-#         return (data[''])
-    
-#     abort (400)
+@rgr.route("/rgr/list", methods=["GET"])
+@login_required 
+def list():
+    page = request.args.get('page', 1, type=int)
+    pagination = books.query.paginate(page=page, per_page=20, error_out=False)
+    return render_template('list.html', pagination=pagination)

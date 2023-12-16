@@ -1,6 +1,8 @@
 # импортируем переменную db из файла
 from . import db 
 from flask_login import UserMixin
+from flask_migrate import Migrate
+
 
 '''
 Описываем схему нашей БД в виде объектов
@@ -24,7 +26,7 @@ class books(db.Model):
     author = db.Column(db.String(100), nullable=False)
     pages = db.Column(db.Integer, nullable=False)
     publisher = db.Column(db.String(100), nullable=False)
+    cover = db.Column(db.String(500)) #поле обложки
 
-
-    def __repr__ (self):
-        return f'title: {self.title}, author: {self.author}, pages: {self.pages}, publisher:{self.publisher}'
+    def repr (self):
+        return f'title: {self.title}, author: {self.author}, pages: {self.pages}, publisher:{self.publisher}, cover:{self.cover}'

@@ -1,5 +1,5 @@
 body {
-    background-color: #869deb;
+    background-color: rgb(253, 250, 250);
     color: #000000;
   }
   
@@ -22,10 +22,10 @@ header {
 
 footer {
   background-image: linear-gradient(to right, rgb(191, 255, 94), rgb(120, 241, 124));
-    color: rgb(13, 83, 168); 
+    color: rgb(1, 77, 230);
     padding: 15px; 
-    font-size: 16pt; 
-    font-style: italic; 
+    font-size: 20pt; 
+    font-style: arial; 
     text-align: right;
     position: fixed;
     bottom: 0;
@@ -53,5 +53,40 @@ footer {
 
 .current {
     display: inline-block;
-    margin-right: 15px;
+    margin-right: 20px;
+    color: white;
+}
+
+.current a {
+  color: rgb(1, 77, 230);
+  text-decoration: none;   
+  text-shadow: 3px 3px 3px gray;
+  font-weight: bold;
+  margin-right: 30px;
+  font-size: 30px;;
+}
+
+.current a:hover {
+  color: rgb(237, 7, 87);
+  font-size: 31px;
+}
+
+/* Свойство display: grid; превращает элемент с классом .row в грид-контейнер. 
+Это означает, что все прямые дочерние элементы этого контейнера теперь будут 
+автоматически размещаться внутри этой сетки. */
+
+/* Свойство grid-template-columns: 1fr 1fr 1fr 1fr; определяет структуру колонок 
+внутри грид-контейнера. В данном случае у нас будет 4 колонки равной ширины.  */
+
+/* 1fr - это единица измерения в CSS Grid, которая означает "одна доля доступного 
+пространства". Таким образом, если у нас есть 4 колонки по 1fr, каждая колонка 
+займет одну четверть всего доступного пространства в грид-контейнере. */
+
+.row {
+  margin-left: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-column-gap: 10px; /* расстояние между колонками */
+  grid-row-gap: 10px; /* расстояние между рядами */
+
 }

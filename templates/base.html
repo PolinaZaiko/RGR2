@@ -14,8 +14,9 @@
 <body>
     <header>
         <ul>
-            <li class="current"><a href="/rgr">Список книг</a></li>
-            <li class="current"><a href="">Добавить новую книгу</a></li>
+            <li class="current"><a href="/rgr">Главная страница</a></li>
+            <li class="current"><a href="/rgr/list">Список книг</a></li>
+            <li class="current"><a href="/rgr/add_book">Добавить новую книгу</a></li>
             {% if current_user.is_authenticated %}
             <li class="current"><a href="">{{ current_user.username }}</a></li>
             <li class="current"><a href="/logout">Выйти из профиля</a></li>
