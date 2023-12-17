@@ -27,6 +27,17 @@ def logout():
     logout_user()
     return redirect('/rgr')
 
+
+
+@rgr.route('/delete_account', methods=['GET'])
+@login_required
+def delete_account():
+    user = users.query.get(current_user.id)  # Получаем пользователя из базы данных
+    logout_user()
+    db.session.delete(user)
+    db.session.commit()
+    return redirect('/rgr')
+
 @rgr.route("/rgr/register", methods=["GET", "POST"]) 
 def register():
     if request.method == "GET":
@@ -196,5 +207,3 @@ def list():
 # - all() - выполняет запрос и возвращает все найденные записи.
 
     return render_template('list.html', pagination=pagination, bookes=bookes, authors=authors, titles=titles, publishers=publishers, pages_from=pages_from, pages_to=pages_to)
-
-

@@ -20,7 +20,10 @@
             {% if current_user.is_authenticated %}
                 <li class="current"><a href="">{{ current_user.username }}</a></li>
                 <li class="current"><a href="/logout">Выйти из профиля</a></li>
-            {% else %}
+
+                <li class="current"><a href="/delete_account" onclick="return confirm('Вы уверены, что хотите удалить аккаунт?')">Удалить аккаунт</a></li>
+
+                    {% else %}
                 <li class="current"><a href="/rgr/login">Логин</a></li>
                 <li class="current"><a href="/rgr/register">Регистрация</a></li>
             {% endif %}
