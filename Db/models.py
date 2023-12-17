@@ -2,8 +2,6 @@
 from . import db 
 from flask_login import UserMixin
 
-
-
 '''
 Описываем схему нашей БД в виде объектов
 Таким образом, создание таблиц (схемы БД) возьмет 
@@ -16,7 +14,9 @@ class users(db.Model, UserMixin):
     password = db.Column (db.String(102), nullable=False)
 
     # repr - от слова represent
-    # мы подсказываем ORM как отображать эти # данные в строковом виде
+    # мы подсказываем ORM как отображать эти 
+    # # данные в строковом виде
+    
     def __repr__ (self):
         return f'id: {self.id}, username: {self.username}'
 

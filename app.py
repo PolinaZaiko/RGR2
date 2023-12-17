@@ -1,10 +1,8 @@
 from flask import Flask
 from rgr import rgr
-
 from Db import db 
 from Db.models import users 
 from flask_login import LoginManager
-
 
 app=Flask(__name__)
 

@@ -1,5 +1,4 @@
 from flask import Blueprint, request, render_template, redirect, url_for, current_app
-
 from Db import db
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import login_user, login_required, current_user, logout_user
@@ -7,9 +6,6 @@ from Db.models import users, books
 import os
 from werkzeug.utils import secure_filename
 import time
-
-
-
 
 rgr = Blueprint ("rgr", __name__)
 
@@ -25,13 +21,11 @@ def main():
     else:
         return render_template('rgr.html')
 
-
 @rgr.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect('/rgr')
-
 
 @rgr.route("/rgr/register", methods=["GET", "POST"]) 
 def register():
@@ -72,6 +66,7 @@ def register():
     hashedPswd = generate_password_hash(password_form, method='pbkdf2')
     # Создаем объект users с нужными полями
     newUser = users(username=username_form, password=hashedPswd)
+    
     # Это INSERT
     db.session.add(newUser)
 
@@ -111,9 +106,16 @@ def login():
     login_user(my_user, remember=False)
     return redirect("/rgr")
 
-# Вероятно, проблема связана с тем, как вы сохраняете файл обложки. Вы используете функцию secure_filename, которая удаляет все "небезопасные" символы из имени файла. Это может включать в себя пробелы, специальные символы и даже некоторые буквы, в зависимости от настроек вашей системы. В результате, если имя файла содержит только "небезопасные" символы, после применения secure_filename останется только расширение файла.
+# Я сохраняю файл обложки. 
+# и использую функцию secure_filename, которая удаляет все "небезопасные" 
+# символы из имени файла. Это может включать в себя пробелы, специальные символы 
+# и даже некоторые буквы, в зависимости от настроек системы. В результате,
+# если имя файла содержит только "небезопасные" символы, после применения 
+# secure_filename останется только расширение файла.
 
-# Чтобы решить эту проблему, вы можете добавить к имени файла некоторую уникальную строку перед сохранением. Например, вы можете использовать текущее время или идентификатор пользователя:
+# Чтобы решить эту проблему,я добавляю к имени файла некоторую 
+# уникальную строку перед сохранением. Я использую  
+# текущее время
 
 @rgr.route("/rgr/add_book", methods=["GET", "POST"])
 @login_required
@@ -163,18 +165,35 @@ def list():
     if publisher:
         bookes_query = bookes_query.filter(books.publisher.contains(publisher))
 
+    # Метод contains используется для поиска подстроки в строке.
+
     # сортируем по выбранному полю
     if sort_by:
         bookes_query = bookes_query.order_by(getattr(books, sort_by))
+
+    # getattr(books, sort_by) - это вызов встроенной функции Python getattr, 
+    # которая возвращает значение атрибута указанного объекта (books в данном случае) 
+    # по его имени (sort_by в данном случае). 
 
     # получаем все книги после фильтрации и сортировки
     pagination = bookes_query.paginate(page=page, per_page=20, error_out=False)
     bookes = pagination.items
 
+    # Пагинация - это процесс разделения контента на отдельные страницы.
+    # Если указанная страница не существует и error_out установлено в False, 
+    # то функция вернет пустой список, а не вызовет ошибку.
+
     # получаем уникальные авторы, названия и издательства
     authors = books.query.with_entities(books.author).distinct().all()
     titles = books.query.with_entities(books.title).distinct().all()
     publishers = books.query.with_entities(books.publisher).distinct().all()
+
+# - books.query - начинает новый запрос к таблице books в базе данных.
+# - with_entities(books.author) - указывает, что в результате запроса должны быть 
+# возвращены только данные об авторах книг (поле author).
+# - distinct() - гарантирует, что каждый автор будет включен в результат только один раз,
+# даже если он написал несколько книг.
+# - all() - выполняет запрос и возвращает все найденные записи.
 
     return render_template('list.html', pagination=pagination, bookes=bookes, authors=authors, titles=titles, publishers=publishers, pages_from=pages_from, pages_to=pages_to)
 

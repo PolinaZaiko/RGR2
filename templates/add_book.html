@@ -1,17 +1,23 @@
 {% extends 'base.html' %}
 {% block main%}
     <h1 class="opt">Добавить новую книгу</h1>
+
     <form class="form" method="post" enctype="multipart/form-data">
         <label for="title">Название:</label><br>
         <input type="text" id="title" name="title" value="{{ title }}"><br>
+
         <label for="author">Автор:</label><br>
         <input type="text" id="author" name="author" value="{{ author }}"><br>
+
         <label for="pages">Количество страниц:</label><br>
         <input type="number" id="pages" name="pages" value="{{ pages }}"><br>
+
         <label for="publisher">Издатель:</label><br>
         <input type="text" id="publisher" name="publisher" value="{{ publisher }}"><br>
+
         <label for="cover">Обложка:</label><br>
         <input type="file" id="cover" name="cover" value="{{ cover }}"><br>
+
         <button type="submit">Готово</button>
 
         {% if error %}
@@ -19,3 +25,7 @@
         {% endif %}
     </form>     
 {% endblock %}
+
+<!-- "multipart/form-data" указывает, что форма должна использовать сериализацию данных 
+формы, которая подходит для файлов. Это необходимо, когда форма содержит элементы 
+<input type="file">, которые позволяют пользователю загружать файлы на сервер. -->
