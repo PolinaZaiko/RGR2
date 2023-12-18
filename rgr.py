@@ -205,3 +205,40 @@ def list():
 # - all() - выполняет запрос и возвращает все найденные записи.
 
     return render_template('list.html', pagination=pagination, bookes=bookes, authors=authors, titles=titles, publishers=publishers, pages_from=pages_from, pages_to=pages_to)
+
+@rgr.route("/rgr/delete_book/<int:book_id>", methods=["POST"])
+@login_required
+def delete_book(book_id):
+    book = books.query.get_or_404(book_id)
+    db.session.delete(book)
+    db.session.commit()
+    return redirect(url_for('rgr.list'))
+
+# get_or_404. Если объект с таким идентификатором не найден, 
+# этот метод автоматически возвращает ошибку 404.
+
+@rgr.route("/rgr/redact/<int:book_id>", methods=["GET", "POST"])
+@login_required
+def redact(book_id):
+    book = books.query.get_or_404(book_id)
+    if request.method == "POST":
+        title = request.form.get("title")
+        author = request.form.get("author")
+        pages = request.form.get("pages")
+        publisher = request.form.get("publisher")
+        cover = request.files.get("cover")
+        if title and author and pages and publisher:
+            if cover: # check if a new cover was uploaded
+                filename = secure_filename(str(time.time()) + "_" + cover.filename)
+                cover.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+                book.cover = filename # update the cover only if a new one was uploaded
+            book.title = title
+            book.author = author
+            book.pages = pages
+            book.publisher = publisher
+
+            db.session.commit()
+            return redirect(url_for('rgr.list'))
+        else:
+            return render_template("redact.html", error="Заполните все поля!", book=book)
+    return render_template("redact.html", book=book)

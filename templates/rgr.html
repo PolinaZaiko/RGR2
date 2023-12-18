@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
 {% block main %}
 <div class="opt">Добро пожаловать</div>
-<table>
+{% if current_user.is_authenticated and current_user.username == 'polina' %}
+    <i><div class="opt">Любимый администратор {{ current_user.username }}</div></i>
+{% else %}
+    <i><div class="opt">{{ current_user.username }}</div></i>
+{% endif %}
+<table style="margin-bottom: 50px;">
     <tr>
       <th>Вариант</th>
       <th>Задание</th>

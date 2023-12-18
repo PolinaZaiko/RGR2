@@ -125,7 +125,6 @@ img {
   font-family: Marker Felt;
   max-width: 100%;
   text-align: center;
-
 }
 
 .knopki {
@@ -217,4 +216,14 @@ table {
 th, td {
   border: 1px solid black;
   padding: 10px;
+}
+
+.delete-button {
+  background-color: transparent; /*цвет фона дочерних элементов совпадает с цветом фона родительского элемента. */
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  font-size: 20px;
+  color: red;
 }

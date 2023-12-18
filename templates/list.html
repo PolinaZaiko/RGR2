@@ -44,13 +44,24 @@
 
     <div class="row">
         {% for book in pagination.items %}
-        <div class="book-card">
-            <h5 class="book-title">{{ book.title }}</h5>
-            <img class="book-cover" src="{{ url_for('static', filename='oblozhki/' + book.cover) }}">
-            <p class="book-info ">Автор: {{ book.author }}</p>
-            <p class="book-info">Издатель: {{ book.publisher }}</p>
-            <p class="book-info">{{ book.pages }} страниц</p>
-        </div>
+            <div class="book-card">
+                <h5 class="book-title">{{ book.title }}</h5>
+                <img class="book-cover" src="{{ url_for('static', filename='oblozhki/' + book.cover) }}">
+                <p class="book-info ">Автор: {{ book.author }}</p>
+                <p class="book-info">Издатель: {{ book.publisher }}</p>
+                <p class="book-info">{{ book.pages }} страниц</p>
+
+                {% if current_user.is_authenticated and current_user.username == 'polina' %}
+                    <!-- кнопка редактирования -->
+                    <form method="GET" action="{{ url_for('rgr.redact', book_id=book.id) }}"> 
+                        <button type="submit" style="font-size: 10px; margin-top: 20px; background-color: antiquewhite; color: black; font-weight: bold;">Редактировать</button>
+                    </form>
+                    <!-- кнопка удаления -->
+                    <form method="POST" action="{{ url_for('rgr.delete_book', book_id=book.id) }}" onsubmit="return confirm('Вы уверены, что хотите удалить эту книгу?');">
+                        <button type="submit" class="delete-button">X</button>
+                    </form>
+                {% endif %}
+            </div>
         {% endfor %}
     </div>
 
