@@ -27,8 +27,6 @@ def logout():
     logout_user()
     return redirect('/rgr')
 
-
-
 @rgr.route('/delete_account', methods=['GET'])
 @login_required
 def delete_account():
